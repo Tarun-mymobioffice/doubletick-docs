@@ -1,0 +1,148 @@
+---
+title: "Insert Task Comment"
+api: "POST https://prod-api.task-management.mobioffice.io/api/task/InsertTaskComment"
+description: "Adds a comment to a task. Supports mentions, private comments, and WhatsApp message delivery."
+---
+
+## Authorization
+
+<ParamField header="secret-key" type="string" required>
+  Your API secret key. Pass it directly as the header value.
+</ParamField>
+
+---
+
+## Body
+
+<ParamField body="IsActive" type="boolean" default="true">
+  Whether this comment entry is active.
+</ParamField>
+
+<ParamField body="TaskComment" type="object" required>
+  The comment details.
+
+  <Expandable title="TaskComment fields">
+    <ParamField body="TaskID" type="integer" required>
+      ID of the task to comment on.
+    </ParamField>
+    <ParamField body="CommentHtml" type="string">
+      Comment body in HTML format. Used for rich-text rendering in the dashboard.
+    </ParamField>
+    <ParamField body="CommentText" type="string" required>
+      Comment body in plain text. Used for notifications.
+    </ParamField>
+    <ParamField body="MentionIds" type="array">
+      User IDs to @mention in the comment. Mentioned users receive a notification.
+    </ParamField>
+    <ParamField body="ExternalFrom" type="string">
+      Source identifier when the comment originates from an external system.
+    </ParamField>
+    <ParamField body="IsIncoming" type="boolean" default="false">
+      Set to `true` for comments received from external sources (e.g. a customer reply via WhatsApp or email).
+    </ParamField>
+    <ParamField body="IsPrivate" type="boolean" default="false">
+      Set to `true` to make this comment visible only to internal team members, not the customer.
+    </ParamField>
+    <ParamField body="IsSentAsWhatsapp" type="boolean" default="false">
+      Set to `true` to also deliver this comment as a WhatsApp message to the task assignee.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+---
+
+## Examples
+
+<RequestExample>
+```bash cURL
+curl -X POST 'https://prod-api.task-management.mobioffice.io/api/task/InsertTaskComment' \
+  -H 'Authorization: Bearer <your-token>' \
+  -H 'Content-Type: application/json' \
+  --data-raw '{
+    "IsActive": true,
+    "TaskComment": {
+      "IsActive": true,
+      "TaskID": 109006,
+      "CommentHtml": "<p>Approved and moving forward.</p>",
+      "CommentText": "Approved and moving forward.",
+      "MentionIds": [1],
+      "ExternalFrom": "",
+      "IsIncoming": false,
+      "IsPrivate": false,
+      "IsSentAsWhatsapp": false
+    }
+  }'
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://prod-api.task-management.mobioffice.io/api/task/InsertTaskComment",
+    headers={
+        "Authorization": "Bearer <your-token>",
+        "Content-Type": "application/json"
+    },
+    json={
+        "IsActive": True,
+        "TaskComment": {
+            "IsActive": True,
+            "TaskID": 109006,
+            "CommentHtml": "<p>Approved and moving forward.</p>",
+            "CommentText": "Approved and moving forward.",
+            "MentionIds": [1],
+            "ExternalFrom": "",
+            "IsIncoming": False,
+            "IsPrivate": False,
+            "IsSentAsWhatsapp": False
+        }
+    }
+)
+print(response.json())
+```
+
+```javascript Node.js
+const response = await fetch(
+  "https://prod-api.task-management.mobioffice.io/api/task/InsertTaskComment",
+  {
+    method: "POST",
+    headers: {
+      "Authorization": "Bearer <your-token>",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      IsActive: true,
+      TaskComment: {
+        IsActive: true,
+        TaskID: 109006,
+        CommentHtml: "<p>Approved and moving forward.</p>",
+        CommentText: "Approved and moving forward.",
+        MentionIds: [1],
+        ExternalFrom: "",
+        IsIncoming: false,
+        IsPrivate: false,
+        IsSentAsWhatsapp: false
+      }
+    })
+  }
+);
+const data = await response.json();
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "IsSuccess": true,
+  "Message": "Comment added successfully",
+  "CommentID": 48321
+}
+```
+
+```json 401
+{
+  "IsSuccess": false,
+  "Message": "Unauthorized access"
+}
+```
+</ResponseExample>

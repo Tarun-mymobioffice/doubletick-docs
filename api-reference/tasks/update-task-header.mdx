@@ -1,0 +1,116 @@
+---
+title: "Update Task Title & Description"
+api: "PUT https://prod-api.task-management.mobioffice.io/api/task/UpdateTaskHeadingDescription"
+description: "Updates the title and description of an existing task."
+---
+
+## Authorization
+
+<ParamField header="secret-key" type="string" required>
+  Your API secret key. Pass it directly as the header value.
+</ParamField>
+
+---
+
+## Query Parameters
+
+<ParamField query="TaskID" type="integer" required>
+  The ID of the task to update.
+
+  **Example:** `?TaskID=109006`
+</ParamField>
+
+---
+
+## Body
+
+<ParamField body="TaskID" type="integer" required>
+  The ID of the task to update. Must match the `TaskID` query parameter.
+</ParamField>
+
+<ParamField body="Title" type="string" required>
+  New title for the task.
+</ParamField>
+
+<ParamField body="DescriptionHtml" type="string">
+  Updated description in HTML format. Used for rich-text display in the dashboard.
+</ParamField>
+
+<ParamField body="DescriptionText" type="string">
+  Updated description in plain text. Used for notifications and exports.
+</ParamField>
+
+---
+
+## Examples
+
+<RequestExample>
+```bash cURL
+curl -X PUT 'https://prod-api.task-management.mobioffice.io/api/task/UpdateTaskHeadingDescription?TaskID=109006' \
+  -H 'Authorization: Bearer <your-token>' \
+  -H 'Content-Type: application/json' \
+  --data-raw '{
+    "TaskID": 109006,
+    "Title": "Updated Task Title",
+    "DescriptionHtml": "<html><head></head><body><p>Updated description here</p></body></html>",
+    "DescriptionText": "Updated description here"
+  }'
+```
+
+```python Python
+import requests
+
+response = requests.put(
+    "https://prod-api.task-management.mobioffice.io/api/task/UpdateTaskHeadingDescription",
+    params={"TaskID": 109006},
+    headers={
+        "Authorization": "Bearer <your-token>",
+        "Content-Type": "application/json"
+    },
+    json={
+        "TaskID": 109006,
+        "Title": "Updated Task Title",
+        "DescriptionHtml": "<html><head></head><body><p>Updated description here</p></body></html>",
+        "DescriptionText": "Updated description here"
+    }
+)
+print(response.json())
+```
+
+```javascript Node.js
+const response = await fetch(
+  "https://prod-api.task-management.mobioffice.io/api/task/UpdateTaskHeadingDescription?TaskID=109006",
+  {
+    method: "PUT",
+    headers: {
+      "Authorization": "Bearer <your-token>",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      TaskID: 109006,
+      Title: "Updated Task Title",
+      DescriptionHtml: "<html><head></head><body><p>Updated description here</p></body></html>",
+      DescriptionText: "Updated description here"
+    })
+  }
+);
+const data = await response.json();
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "IsSuccess": true,
+  "Message": "Task updated successfully",
+  "TaskID": 109006
+}
+```
+
+```json 401
+{
+  "IsSuccess": false,
+  "Message": "Unauthorized access"
+}
+```
+</ResponseExample>

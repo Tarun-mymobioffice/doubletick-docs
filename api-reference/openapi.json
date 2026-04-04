@@ -1,0 +1,552 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "DoubleTick API",
+    "description": "Task management APIs for DoubleTick — create tasks, update details, manage comments, and automate your operations.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "DoubleTick Support",
+      "email": "support@doubletick.io",
+      "url": "https://doubletick.io"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://prod-api.task-management.mobioffice.io",
+      "description": "Production"
+    }
+  ],
+  "security": [{ "secretKeyAuth": [] }],
+  "paths": {
+    "/api/task/InsertTaskMain": {
+      "post": {
+        "summary": "Create task",
+        "description": "Creates a new task with full configuration including assignees, collaborators, labels, tags, attachments, and checklist items.",
+        "operationId": "createTask",
+        "tags": ["Tasks"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/InsertTaskMainRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Task created successfully",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TaskResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "400": { "$ref": "#/components/responses/BadRequest" }
+        }
+      }
+    },
+    "/api/task/UpdateTaskHeadingDescription": {
+      "put": {
+        "summary": "Update task title & description",
+        "description": "Updates the title and description (HTML and plain text) of an existing task.",
+        "operationId": "updateTaskHeadingDescription",
+        "tags": ["Tasks"],
+        "parameters": [
+          {
+            "name": "TaskID",
+            "in": "query",
+            "required": true,
+            "description": "The ID of the task to update",
+            "schema": { "type": "integer", "example": 109006 }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateTaskHeadingDescriptionRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Task updated successfully",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TaskResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/task/UpdateTaskMain": {
+      "put": {
+        "summary": "Update task",
+        "description": "Updates task properties such as status, assignee, priority, dates, and workspace.",
+        "operationId": "updateTaskMain",
+        "tags": ["Tasks"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateTaskMainRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Task updated successfully",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TaskResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/api/task/InsertTaskComment": {
+      "post": {
+        "summary": "Insert task comment",
+        "description": "Adds a comment to an existing task. Supports mentions, private comments, and WhatsApp delivery.",
+        "operationId": "insertTaskComment",
+        "tags": ["Tasks"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/InsertTaskCommentRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Comment added successfully",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CommentResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "secretKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "secret-key",
+        "description": "Secret key — pass your key directly in the `secret-key` header (no Bearer prefix needed)"
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "Missing or invalid authorization",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Resource not found",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "BadRequest": {
+        "description": "Bad request — invalid or missing parameters",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "InsertTaskMainRequest": {
+        "type": "object",
+        "required": ["IsActive", "TaskMain"],
+        "properties": {
+          "IsActive": {
+            "type": "boolean",
+            "default": true
+          },
+          "TaskMain": {
+            "$ref": "#/components/schemas/TaskMain"
+          },
+          "MentionIds": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "description": "User IDs to mention in the task",
+            "example": []
+          },
+          "CollaboratorsEmailIds": {
+            "type": "array",
+            "items": { "type": "string", "format": "email" },
+            "description": "Emails of collaborators to add to the task",
+            "example": ["swamy.kandru@mymobioffice.com"]
+          },
+          "CarbonCopyEmailIds": {
+            "type": "array",
+            "items": { "type": "string", "format": "email" },
+            "description": "Emails to CC on task notifications",
+            "example": ["tarun.chelumalla@mymobioffice.com"]
+          },
+          "LabelIds": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "description": "Label IDs to attach to the task",
+            "example": [103]
+          },
+          "TagIds": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "description": "Tag IDs to attach to the task",
+            "example": [1]
+          },
+          "AttachedFiles": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AttachedFile" },
+            "description": "Files to attach to the task"
+          },
+          "WorkBatchIDs": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "description": "Work batch IDs to associate with the task",
+            "example": [327]
+          },
+          "EmailCCs": {
+            "type": "array",
+            "items": { "type": "string", "format": "email" },
+            "description": "Additional email CC addresses",
+            "example": ["tarun.chelumalla@mymobioffice.com"]
+          },
+          "IsTaskRulesApplied": {
+            "type": "boolean",
+            "description": "Whether to apply automation rules to this task",
+            "default": false
+          },
+          "CheckListItems": {
+            "type": "array",
+            "items": { "type": "object" },
+            "description": "Checklist items to add to the task",
+            "example": []
+          }
+        }
+      },
+      "TaskMain": {
+        "type": "object",
+        "required": ["Title", "AssignedToID", "StatusID", "WorkspaceID"],
+        "properties": {
+          "IsActive": {
+            "type": "boolean",
+            "default": true
+          },
+          "TaskIds": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "example": []
+          },
+          "Title": {
+            "type": "string",
+            "description": "Task title",
+            "example": "Create Ticket"
+          },
+          "DescriptionHtml": {
+            "type": "string",
+            "description": "Task description in HTML format",
+            "example": "<p>Task description here</p>"
+          },
+          "DescriptionText": {
+            "type": "string",
+            "description": "Task description in plain text",
+            "example": "Task description here"
+          },
+          "AssignedToID": {
+            "type": "string",
+            "description": "Email of the user this task is assigned to",
+            "example": "tarun.chelumalla@mymobioffice.com"
+          },
+          "VerifierByID": {
+            "type": "string",
+            "description": "Email of the user who verifies/approves the task",
+            "example": "tarun.chelumalla@mymobioffice.com"
+          },
+          "StartDate": {
+            "type": "string",
+            "description": "Task start date in ISO 8601 format",
+            "example": "2026-03-28T12:30"
+          },
+          "EndDate": {
+            "type": "string",
+            "description": "Task due date in ISO 8601 format. Leave empty for no due date.",
+            "example": ""
+          },
+          "StatusID": {
+            "type": "integer",
+            "description": "ID of the task status",
+            "example": 20
+          },
+          "FlowID": {
+            "type": "integer",
+            "description": "ID of the workflow/flow this task belongs to",
+            "example": 2
+          },
+          "PriorityID": {
+            "type": "integer",
+            "description": "Task priority ID (e.g. 4 = Normal)",
+            "example": 4
+          },
+          "ParentTaskID": {
+            "type": "string",
+            "description": "ID of the parent task if this is a subtask. Leave empty for root tasks.",
+            "example": ""
+          },
+          "ProjectID": {
+            "type": "integer",
+            "description": "ID of the project this task belongs to",
+            "example": 12
+          },
+          "AssetID": {
+            "type": "integer",
+            "description": "ID of the asset associated with this task",
+            "example": 394
+          },
+          "ReferenceID": {
+            "type": "string",
+            "description": "External reference ID for linking to third-party systems",
+            "example": ""
+          },
+          "CustomerID": {
+            "type": "integer",
+            "description": "Customer ID to associate with this task",
+            "example": 0
+          },
+          "TaskDetailsConfigurationID": {
+            "type": "integer",
+            "description": "ID of the task detail configuration/form template",
+            "example": 5
+          },
+          "WorkspaceID": {
+            "type": "integer",
+            "description": "ID of the workspace this task is created in",
+            "example": 5
+          }
+        }
+      },
+      "AttachedFile": {
+        "type": "object",
+        "properties": {
+          "CID": {
+            "type": "string",
+            "description": "Client-generated ID for the file",
+            "example": "10"
+          },
+          "DocumentName": {
+            "type": "string",
+            "description": "Original file name",
+            "example": "invoice.pdf"
+          },
+          "DocumentUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "Publicly accessible URL of the uploaded file",
+            "example": "https://r2-internal.mobioffice.io/1773206261365-invoice.pdf"
+          },
+          "DocumentSize": {
+            "type": "integer",
+            "description": "File size in bytes",
+            "example": 223575
+          },
+          "DocumentType": {
+            "type": "string",
+            "description": "Type of document",
+            "enum": ["IMAGE", "PDF", "DOCUMENT", "VIDEO", "AUDIO", "OTHER"],
+            "example": "IMAGE"
+          },
+          "DocumentHash": {
+            "type": "string",
+            "description": "SHA-256 hash of the file for integrity verification",
+            "example": "1ea0a5fc7836079285ce3eeb6a08d20b82932c56e3efd5f5a264d367e556c9ff"
+          }
+        }
+      },
+      "UpdateTaskHeadingDescriptionRequest": {
+        "type": "object",
+        "required": ["TaskID", "Title"],
+        "properties": {
+          "TaskID": {
+            "type": "integer",
+            "description": "ID of the task to update",
+            "example": 109006
+          },
+          "Title": {
+            "type": "string",
+            "description": "New task title",
+            "example": "Updated Task Title"
+          },
+          "DescriptionHtml": {
+            "type": "string",
+            "description": "New description in HTML format",
+            "example": "<html><head></head><body><p>Updated description</p></body></html>"
+          },
+          "DescriptionText": {
+            "type": "string",
+            "description": "New description in plain text",
+            "example": "Updated description"
+          }
+        }
+      },
+      "UpdateTaskMainRequest": {
+        "type": "object",
+        "required": ["TaskID", "WorkspaceID"],
+        "properties": {
+          "IsActive": {
+            "type": "boolean",
+            "default": true
+          },
+          "TaskIds": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "example": []
+          },
+          "TaskID": {
+            "type": "integer",
+            "description": "ID of the task to update",
+            "example": 109006
+          },
+          "StatusID": {
+            "type": "integer",
+            "description": "New status ID for the task",
+            "example": 1
+          },
+          "AssignedToID": {
+            "type": "string",
+            "description": "Email of the new assignee",
+            "example": "tarun.chelumalla@mymobioffice.com"
+          },
+          "PriorityID": {
+            "type": "integer",
+            "description": "New priority ID",
+            "example": 4
+          },
+          "StartDate": {
+            "type": "string",
+            "description": "Updated start date",
+            "example": "2026-03-28T12:30"
+          },
+          "EndDate": {
+            "type": "string",
+            "description": "Updated due date",
+            "example": ""
+          },
+          "WorkspaceID": {
+            "type": "integer",
+            "description": "Workspace ID",
+            "example": 5
+          }
+        }
+      },
+      "InsertTaskCommentRequest": {
+        "type": "object",
+        "required": ["IsActive", "TaskComment"],
+        "properties": {
+          "IsActive": {
+            "type": "boolean",
+            "default": true
+          },
+          "TaskComment": {
+            "$ref": "#/components/schemas/TaskComment"
+          }
+        }
+      },
+      "TaskComment": {
+        "type": "object",
+        "required": ["TaskID", "CommentText"],
+        "properties": {
+          "IsActive": {
+            "type": "boolean",
+            "default": true
+          },
+          "TaskID": {
+            "type": "integer",
+            "description": "ID of the task to comment on",
+            "example": 109006
+          },
+          "CommentHtml": {
+            "type": "string",
+            "description": "Comment body in HTML format",
+            "example": "<p>Approved and moving forward.</p>"
+          },
+          "CommentText": {
+            "type": "string",
+            "description": "Comment body in plain text",
+            "example": "Approved and moving forward."
+          },
+          "MentionIds": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "description": "User IDs to mention in the comment",
+            "example": [1]
+          },
+          "ExternalFrom": {
+            "type": "string",
+            "description": "Source identifier for external/incoming messages",
+            "example": ""
+          },
+          "IsIncoming": {
+            "type": "boolean",
+            "description": "Whether this comment came from an external source (e.g. customer reply)",
+            "default": false
+          },
+          "IsPrivate": {
+            "type": "boolean",
+            "description": "If true, comment is only visible to internal team members",
+            "default": false
+          },
+          "IsSentAsWhatsapp": {
+            "type": "boolean",
+            "description": "If true, comment is also delivered as a WhatsApp message to the assignee",
+            "default": false
+          }
+        }
+      },
+      "TaskResponse": {
+        "type": "object",
+        "properties": {
+          "IsSuccess": { "type": "boolean", "example": true },
+          "Message": { "type": "string", "example": "Task created successfully" },
+          "TaskID": { "type": "integer", "example": 109006 }
+        }
+      },
+      "CommentResponse": {
+        "type": "object",
+        "properties": {
+          "IsSuccess": { "type": "boolean", "example": true },
+          "Message": { "type": "string", "example": "Comment added successfully" },
+          "CommentID": { "type": "integer", "example": 48321 }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "IsSuccess": { "type": "boolean", "example": false },
+          "Message": { "type": "string", "example": "Unauthorized access" }
+        }
+      }
+    }
+  }
+}

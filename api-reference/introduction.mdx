@@ -1,0 +1,85 @@
+---
+title: "API Overview"
+description: "Authentication, base URL, and request format for the DoubleTick API."
+---
+
+## Base URL
+
+```
+https://prod-api.task-management.mobioffice.io
+```
+
+---
+
+## Authentication
+
+Every request must include a `secret-key` header:
+
+```http
+secret-key: <your-secret-key>
+```
+
+Get your secret key from the [DoubleTick dashboard](https://doubletick.mobi).
+
+<Tip>
+  In the API playground on each endpoint page, you'll find an **Authorization** section with a fillable `secret-key` field. Enter your key there to make live test calls directly from the docs.
+</Tip>
+
+<Warning>Never expose your secret key in client-side code, browser environments, or public repositories.</Warning>
+
+---
+
+## Request format
+
+- All request bodies must be JSON
+- Set `Content-Type: application/json` on every request with a body
+- Dates use ISO 8601 format: `2026-03-28T12:30`
+- Task IDs are integers (e.g. `109006`)
+
+---
+
+## Response format
+
+All API responses return a JSON object with at minimum an `IsSuccess` field:
+
+### Success
+
+```json
+{
+  "IsSuccess": true,
+  "Message": "Task created successfully",
+  "TaskID": 109006
+}
+```
+
+### Error
+
+```json
+{
+  "IsSuccess": false,
+  "Message": "Unauthorized access"
+}
+```
+
+---
+
+## HTTP status codes
+
+| Code  | Meaning                                       |
+| ----- | --------------------------------------------- |
+| `200` | Success                                       |
+| `400` | Bad request — invalid or missing parameters   |
+| `401` | Unauthorized — missing or invalid credentials |
+| `404` | Resource not found                            |
+| `500` | Internal server error                         |
+
+---
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Make your first API call in minutes.
+  </Card>
+  <Card title="Create Task" icon="circle-plus" href="/api-reference/tasks/create-task">
+    Start with the Create Task endpoint.
+  </Card>
+</CardGroup>

@@ -1,0 +1,128 @@
+---
+title: "Update Task"
+api: "PUT https://prod-api.task-management.mobioffice.io/api/task/UpdateTaskMain"
+description: "Updates task properties such as status, assignee, priority, and dates."
+---
+
+## Authorization
+
+<ParamField header="secret-key" type="string" required>
+  Your API secret key. Pass it directly as the header value.
+</ParamField>
+
+---
+
+## Body
+
+<ParamField body="TaskID" type="integer" required>
+  ID of the task to update.
+</ParamField>
+
+<ParamField body="WorkspaceID" type="integer" required>
+  Workspace the task belongs to.
+</ParamField>
+
+<ParamField body="IsActive" type="boolean" default="true">
+  Whether the task remains active after update.
+</ParamField>
+
+<ParamField body="TaskIds" type="array">
+  Additional task IDs for bulk operations.
+</ParamField>
+
+<ParamField body="StatusID" type="integer">
+  New status ID to assign to the task.
+</ParamField>
+
+<ParamField body="AssignedToID" type="string">
+  Email of the new assignee.
+</ParamField>
+
+<ParamField body="PriorityID" type="integer">
+  New priority ID for the task.
+</ParamField>
+
+<ParamField body="StartDate" type="string">
+  Updated start date in ISO 8601 format (e.g. `2026-03-28T12:30`).
+</ParamField>
+
+<ParamField body="EndDate" type="string">
+  Updated due date in ISO 8601 format. Leave empty to clear the due date.
+</ParamField>
+
+---
+
+## Examples
+
+<RequestExample>
+```bash cURL
+curl -X PUT 'https://prod-api.task-management.mobioffice.io/api/task/UpdateTaskMain' \
+  -H 'Authorization: Bearer <your-token>' \
+  -H 'Content-Type: application/json' \
+  --data-raw '{
+    "IsActive": true,
+    "TaskIds": [],
+    "StatusID": 1,
+    "TaskID": 109006,
+    "WorkspaceID": 5
+  }'
+```
+
+```python Python
+import requests
+
+response = requests.put(
+    "https://prod-api.task-management.mobioffice.io/api/task/UpdateTaskMain",
+    headers={
+        "Authorization": "Bearer <your-token>",
+        "Content-Type": "application/json"
+    },
+    json={
+        "IsActive": True,
+        "TaskIds": [],
+        "StatusID": 1,
+        "TaskID": 109006,
+        "WorkspaceID": 5
+    }
+)
+print(response.json())
+```
+
+```javascript Node.js
+const response = await fetch(
+  "https://prod-api.task-management.mobioffice.io/api/task/UpdateTaskMain",
+  {
+    method: "PUT",
+    headers: {
+      "Authorization": "Bearer <your-token>",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      IsActive: true,
+      TaskIds: [],
+      StatusID: 1,
+      TaskID: 109006,
+      WorkspaceID: 5
+    })
+  }
+);
+const data = await response.json();
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "IsSuccess": true,
+  "Message": "Task updated successfully",
+  "TaskID": 109006
+}
+```
+
+```json 401
+{
+  "IsSuccess": false,
+  "Message": "Unauthorized access"
+}
+```
+</ResponseExample>

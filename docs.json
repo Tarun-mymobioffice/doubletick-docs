@@ -1,0 +1,75 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "DoubleTick",
+  "colors": {
+    "primary": "#3B8EF3",
+    "light": "#60A5FA",
+    "dark": "#1D4ED8"
+  },
+  "favicon": "/favicon.svg",
+  "appearance": {
+    "default": "dark"
+  },
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Log in",
+        "href": "https://app.mobiofficehq.com/#/app-dashboard"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Start free",
+      "href": "https://www.doubletick.mobi/"
+    }
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Getting Started",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": ["index", "quickstart"]
+          },
+          {
+            "group": "Reference",
+            "pages": ["api-reference/introduction"]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Tasks",
+            "pages": ["api-reference/tasks/create-task", "api-reference/tasks/update-task-header", "api-reference/tasks/update-task", "api-reference/tasks/insert-comment"]
+          },
+          {
+            "group": "Workflows",
+            "pages": ["api-reference/workflows/overview"]
+          },
+          {
+            "group": "Webhooks",
+            "pages": ["api-reference/webhooks"]
+          }
+        ]
+      }
+    ],
+    "global": {}
+  },
+  "footer": {
+    "socials": {
+      "linkedin": "https://linkedin.com/company/mobioffice",
+      "x": "https://x.com/doubletickio"
+    }
+  },
+  "contextual": {
+    "options": ["copy", "view", "claude"]
+  }
+}

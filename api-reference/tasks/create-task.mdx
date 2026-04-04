@@ -1,0 +1,296 @@
+---
+title: "Create Task"
+api: "POST https://prod-api.task-management.mobioffice.io/api/task/InsertTaskMain"
+description: "Creates a new task with assignee, collaborators, labels, tags, attachments, and checklist items."
+---
+
+## Authorization
+
+<ParamField header="secret-key" type="string" required>
+  Your API secret key. Pass it directly as the header value.
+</ParamField>
+
+---
+
+## Body
+
+<ParamField body="IsActive" type="boolean" default="true">
+  Whether the task is active on creation.
+</ParamField>
+
+<ParamField body="TaskMain" type="object" required>
+  Core task configuration.
+
+  <Expandable title="TaskMain fields">
+    <ParamField body="Title" type="string" required>
+      Task title shown in the dashboard.
+    </ParamField>
+    <ParamField body="AssignedToID" type="string" required>
+      Email of the user this task is assigned to.
+    </ParamField>
+    <ParamField body="VerifierByID" type="string">
+      Email of the user who verifies/approves completion.
+    </ParamField>
+    <ParamField body="StatusID" type="integer" required>
+      Status ID for the task (e.g. `20` = Open).
+    </ParamField>
+    <ParamField body="FlowID" type="integer">
+      Workflow/flow ID this task belongs to.
+    </ParamField>
+    <ParamField body="PriorityID" type="integer">
+      Priority ID (e.g. `4` = Normal).
+    </ParamField>
+    <ParamField body="StartDate" type="string">
+      Start date in ISO 8601 format. Example: `2026-03-28T12:30`
+    </ParamField>
+    <ParamField body="EndDate" type="string">
+      Due date in ISO 8601 format. Leave empty for no due date.
+    </ParamField>
+    <ParamField body="ProjectID" type="integer">
+      Project this task belongs to.
+    </ParamField>
+    <ParamField body="AssetID" type="integer">
+      Asset associated with this task.
+    </ParamField>
+    <ParamField body="ParentTaskID" type="string">
+      Parent task ID for subtasks. Leave empty for root-level tasks.
+    </ParamField>
+    <ParamField body="DescriptionHtml" type="string">
+      Task description in HTML format.
+    </ParamField>
+    <ParamField body="DescriptionText" type="string">
+      Task description in plain text.
+    </ParamField>
+    <ParamField body="ReferenceID" type="string">
+      External reference ID for third-party system linking.
+    </ParamField>
+    <ParamField body="CustomerID" type="integer">
+      Customer ID to associate with the task.
+    </ParamField>
+    <ParamField body="TaskDetailsConfigurationID" type="integer">
+      ID of the task detail form/configuration template.
+    </ParamField>
+    <ParamField body="WorkspaceID" type="integer" required>
+      Workspace this task is created in.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField body="MentionIds" type="array">
+  User IDs to mention in the task.
+</ParamField>
+
+<ParamField body="CollaboratorsEmailIds" type="array">
+  Emails of collaborators who can view and edit the task.
+</ParamField>
+
+<ParamField body="CarbonCopyEmailIds" type="array">
+  Emails to CC on task-related notifications.
+</ParamField>
+
+<ParamField body="LabelIds" type="array">
+  Label IDs to attach to the task.
+</ParamField>
+
+<ParamField body="TagIds" type="array">
+  Tag IDs to attach to the task.
+</ParamField>
+
+<ParamField body="AttachedFiles" type="array">
+  Files to attach to the task.
+
+  <Expandable title="AttachedFile fields">
+    <ParamField body="CID" type="string">
+      Client-generated ID for the file upload.
+    </ParamField>
+    <ParamField body="DocumentName" type="string">
+      Original file name (e.g. `invoice.pdf`).
+    </ParamField>
+    <ParamField body="DocumentUrl" type="string">
+      Publicly accessible URL of the uploaded file.
+    </ParamField>
+    <ParamField body="DocumentSize" type="integer">
+      File size in bytes.
+    </ParamField>
+    <ParamField body="DocumentType" type="string">
+      File type: `IMAGE`, `PDF`, `DOCUMENT`, `VIDEO`, `AUDIO`, or `OTHER`.
+    </ParamField>
+    <ParamField body="DocumentHash" type="string">
+      SHA-256 hash of the file for integrity verification.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField body="WorkBatchIDs" type="array">
+  Work batch IDs to associate with this task.
+</ParamField>
+
+<ParamField body="EmailCCs" type="array">
+  Additional email addresses to CC on notifications.
+</ParamField>
+
+<ParamField body="IsTaskRulesApplied" type="boolean" default="false">
+  Set to `true` to trigger automation rules configured for this workflow.
+</ParamField>
+
+<ParamField body="CheckListItems" type="array">
+  Checklist items to add to the task on creation.
+</ParamField>
+
+---
+
+## Examples
+
+<RequestExample>
+```bash cURL
+curl -X POST 'https://prod-api.task-management.mobioffice.io/api/task/InsertTaskMain' \
+  -H 'Authorization: Bearer <your-token>' \
+  -H 'Content-Type: application/json' \
+  --data-raw '{
+    "IsActive": true,
+    "TaskMain": {
+      "IsActive": true,
+      "TaskIds": [],
+      "Title": "Create Ticket",
+      "DescriptionHtml": "<p>Task description here</p>",
+      "DescriptionText": "Task description here",
+      "AssignedToID": "tarun.chelumalla@mymobioffice.com",
+      "VerifierByID": "tarun.chelumalla@mymobioffice.com",
+      "StartDate": "2026-03-28T12:30",
+      "EndDate": "",
+      "StatusID": 20,
+      "FlowID": 2,
+      "PriorityID": 4,
+      "ParentTaskID": "",
+      "ProjectID": 12,
+      "AssetID": 394,
+      "ReferenceID": "",
+      "CustomerID": 0,
+      "TaskDetailsConfigurationID": 5,
+      "WorkspaceID": 5
+    },
+    "MentionIds": [],
+    "CollaboratorsEmailIds": ["swamy.kandru@mymobioffice.com"],
+    "CarbonCopyEmailIds": ["tarun.chelumalla@mymobioffice.com"],
+    "LabelIds": [103],
+    "TagIds": [1],
+    "AttachedFiles": [
+      {
+        "CID": "10",
+        "DocumentName": "invoice.png",
+        "DocumentUrl": "https://r2-internal.mobioffice.io/1773206261365-invoice.png",
+        "DocumentSize": 223575,
+        "DocumentType": "IMAGE",
+        "DocumentHash": "1ea0a5fc7836079285ce3eeb6a08d20b82932c56e3efd5f5a264d367e556c9ff"
+      }
+    ],
+    "WorkBatchIDs": [327],
+    "EmailCCs": ["tarun.chelumalla@mymobioffice.com"],
+    "IsTaskRulesApplied": false,
+    "CheckListItems": []
+  }'
+```
+
+```python Python
+import requests
+
+payload = {
+    "IsActive": True,
+    "TaskMain": {
+        "IsActive": True,
+        "TaskIds": [],
+        "Title": "Create Ticket",
+        "DescriptionHtml": "<p>Task description here</p>",
+        "DescriptionText": "Task description here",
+        "AssignedToID": "tarun.chelumalla@mymobioffice.com",
+        "VerifierByID": "tarun.chelumalla@mymobioffice.com",
+        "StartDate": "2026-03-28T12:30",
+        "EndDate": "",
+        "StatusID": 20,
+        "FlowID": 2,
+        "PriorityID": 4,
+        "ParentTaskID": "",
+        "ProjectID": 12,
+        "AssetID": 394,
+        "ReferenceID": "",
+        "CustomerID": 0,
+        "TaskDetailsConfigurationID": 5,
+        "WorkspaceID": 5
+    },
+    "MentionIds": [],
+    "CollaboratorsEmailIds": ["swamy.kandru@mymobioffice.com"],
+    "CarbonCopyEmailIds": ["tarun.chelumalla@mymobioffice.com"],
+    "LabelIds": [103],
+    "TagIds": [1],
+    "AttachedFiles": [],
+    "WorkBatchIDs": [327],
+    "EmailCCs": ["tarun.chelumalla@mymobioffice.com"],
+    "IsTaskRulesApplied": False,
+    "CheckListItems": []
+}
+
+response = requests.post(
+    "https://prod-api.task-management.mobioffice.io/api/task/InsertTaskMain",
+    headers={"Authorization": "Bearer <your-token>", "Content-Type": "application/json"},
+    json=payload
+)
+print(response.json())
+```
+
+```javascript Node.js
+const response = await fetch(
+  "https://prod-api.task-management.mobioffice.io/api/task/InsertTaskMain",
+  {
+    method: "POST",
+    headers: {
+      "Authorization": "Bearer <your-token>",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      IsActive: true,
+      TaskMain: {
+        IsActive: true,
+        TaskIds: [],
+        Title: "Create Ticket",
+        DescriptionHtml: "<p>Task description here</p>",
+        DescriptionText: "Task description here",
+        AssignedToID: "tarun.chelumalla@mymobioffice.com",
+        StatusID: 20,
+        FlowID: 2,
+        PriorityID: 4,
+        ProjectID: 12,
+        AssetID: 394,
+        WorkspaceID: 5
+      },
+      MentionIds: [],
+      CollaboratorsEmailIds: [],
+      LabelIds: [103],
+      TagIds: [1],
+      AttachedFiles: [],
+      WorkBatchIDs: [327],
+      IsTaskRulesApplied: false,
+      CheckListItems: []
+    })
+  }
+);
+const data = await response.json();
+console.log(data);
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "IsSuccess": true,
+  "Message": "Task created successfully",
+  "TaskID": 109006
+}
+```
+
+```json 401
+{
+  "IsSuccess": false,
+  "Message": "Unauthorized access"
+}
+```
+</ResponseExample>

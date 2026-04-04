@@ -1,0 +1,61 @@
+---
+title: "DoubleTick API"
+description: "Build on DoubleTick — create tasks, manage comments, and automate your business operations programmatically."
+---
+
+## Welcome to DoubleTick API
+
+DoubleTick turns your repeatable business processes into tracked tasks and workflows — so approvals move faster, follow-ups happen automatically, and nothing slips through the cracks.
+
+Use the DoubleTick API to create and update tasks, post comments, and integrate your operations directly into your own systems.
+
+<CardGroup cols={2}>
+  <Card
+    title="Quickstart"
+    icon="rocket"
+    href="/quickstart"
+  >
+    Make your first API call in under 5 minutes.
+  </Card>
+  <Card
+    title="Authentication"
+    icon="key"
+    href="/api-reference/introduction"
+  >
+    Learn how to authenticate with Bearer token or secret key.
+  </Card>
+  <Card
+    title="Tasks API"
+    icon="circle-check"
+    href="/api-reference/tasks/create-task"
+  >
+    Create tasks, update details, and post comments.
+  </Card>
+  <Card
+    title="Webhooks"
+    icon="webhook"
+    href="/api-reference/webhooks"
+  >
+    Receive real-time events when tasks change state.
+  </Card>
+</CardGroup>
+
+## API at a glance
+
+| Resource | Endpoints Available |
+|---|---|
+| **Tasks** | Create task, Update title & description, Update task, Insert comment |
+| **Workflows** | Coming soon |
+| **Webhooks** | Coming soon |
+
+## Base URL
+
+All API requests are made to:
+
+```
+https://prod-api.task-management.mobioffice.io
+```
+
+<Note>
+  Every endpoint requires an `Authorization` header. You can use a **Bearer token** or a **secret key**. See [Authentication](/api-reference/introduction) for details.
+</Note>
