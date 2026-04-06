@@ -2,6 +2,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "DoubleTick",
+  "css": "/styles.css",
   "colors": {
     "primary": "#3B8EF3",
     "light": "#60A5FA",
@@ -48,7 +49,12 @@
         "groups": [
           {
             "group": "Tasks",
-            "pages": ["api-reference/tasks/create-task", "api-reference/tasks/update-task-header", "api-reference/tasks/update-task", "api-reference/tasks/insert-comment"]
+            "pages": [
+              "api-reference/tasks/create-task",
+              "api-reference/tasks/update-task-header",
+              "api-reference/tasks/update-task",
+              "api-reference/tasks/insert-comment"
+            ]
           },
           {
             "group": "Workflows",
